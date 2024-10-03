@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\SubscriptionConfirmationMail;
 use App\Models\User;
 use App\Services\UserService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -17,15 +18,23 @@ class UserController extends ApiController
         return c(UserService::class);
     }
 
-    public function subscribe(Request $request)
+    public function subscribe(Request $request): mixed
     {
-        $request->validate(['email' => 'required|email']);
+        $validate = $this->getService()->validate($request, [
+            'email' => 'required|email',
+            'subscribe_location' => 'required|string'
+        ]);
+
+        if ($validate) {
+            return $validate;
+        }
 
         $user = User::where('email', $request->email)->first();
 
         if ($user) {
             // Generate confirmation token
-            $user->confirmation_token = Str::random(32);
+            $token = Str::random(32) . '?subscribe_location=' . $request->get('subscribe_location');
+            $user->confirmation_token = $token;
             $user->save();
 
             // Send confirmation email with the token
@@ -43,15 +52,19 @@ class UserController extends ApiController
 //        ]);
     }
 
-    public function confirmSubscription($token)
+    public function confirmSubscription(Request $request, $token)
     {
+        $location = $request->get('subscribe_location');
         // Find the user by confirmation token
-        $user = User::where('confirmation_token', $token)->first();
+        $user = User::where(
+            'confirmation_token', $token . '?subscribe_location=' . $location
+        )->first();
 
         if ($user) {
             // Confirm subscription and reset the token
             $user->is_subscribed = true;
             $user->confirmation_token = null;
+            $user->subscribe_location = $location;
             $user->save();
 
             return response()->json(['message' => 'Subscription confirmed successfully!']);

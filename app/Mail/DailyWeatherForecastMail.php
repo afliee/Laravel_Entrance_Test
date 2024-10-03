@@ -70,7 +70,7 @@ class DailyWeatherForecastMail extends Mailable
     protected function getWeatherData(): array
     {
         $apiKey = env('WEATHER_API_KEY'); // Add your API key to .env
-        $location = 'London'; // Replace with a dynamic location if needed
+        $location = $this->user->subscibe_location; // Replace with a dynamic location if needed
 
         // Make a GET request to the Weather API
         $response = Http::get(env('WEATHER_API_URL') . 'current.json', [

@@ -23,7 +23,8 @@ class User extends Authenticatable
         'email_verified_at',
         'is_subscribed',
         'avatar',
-        'confirmation_token'
+        'confirmation_token',
+        'subscribe_location',
     ];
 
     /**
