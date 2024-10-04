@@ -13,3 +13,16 @@ php artisan migrate --force
 
 echo "Publishing cloudinary provider..."
 php artisan vendor:publish --provider="CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider" --tag="cloudinary-laravel-config"
+
+# show schedule
+echo "Showing schedule..."
+php artisan schedule:list
+
+# run schedule
+echo "Running schedule..."
+php artisan schedule:run
+
+# run queue
+echo "Running queue..."
+php artisan queue:work --daemon
+

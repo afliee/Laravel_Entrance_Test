@@ -8,7 +8,30 @@ class UserService extends ApiService
 {
     public function show(Request $request)
     {
-        // TODO: Implement show() method.
+        $data = $request->all();
+        $rules = [
+            'id' => 'required|integer',
+        ];
+
+        $validate = $this->validate($request, $rules);
+
+        if (isset($validate)) {
+            return $validate;
+        }
+
+        $user = User::where('id', $data['id'])->first();
+
+        if (empty($user)) {
+            return [
+                'status' => false,
+                'message' => 'User not found'
+            ];
+        }
+
+        return [
+            'status' => true,
+            'user' => $user
+        ];
     }
 
     public function store(Request $request, array $options = [])

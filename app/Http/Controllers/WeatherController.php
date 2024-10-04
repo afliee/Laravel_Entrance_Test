@@ -28,4 +28,15 @@ class WeatherController extends ApiController
         }
     }
 
+    public function showAllCachedWeather()
+    {
+        $keys = Cache::get('weather_*');
+
+        if ($keys) {
+            $weatherData = Cache::many($keys);
+            return response()->json($weatherData);
+        } else {
+            return response()->json(['message' => 'No cached weather data available'], 404);
+        }
+    }
 }

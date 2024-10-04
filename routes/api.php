@@ -13,11 +13,15 @@ Route::get('/', static function () {
     ];
 });
 
-
+Route::group(['prefix' => 'user'], static function () {
+    Route::get('/{id}', [WeatherController::class, 'show']);
+});
 // prefix weather
 Route::group(['prefix' => 'weather'], static function () {
     Route::get('/', [WeatherController::class, 'show']);
+    Route::get('/cached', [WeatherController::class, 'showAllCachedWeather']);
     Route::get('/cached/{city}', [WeatherController::class, 'showCachedWeather']);
+
 //    Route::get('/{city}', [WeatherController::class, 'getWeather']);
 //    Route::get('/{city}/forecast', [WeatherController::class, 'getForecast']);
 //    Route::get('/{city}', [WeatherController::class, 'getWeather']);
