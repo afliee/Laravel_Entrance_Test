@@ -18,7 +18,8 @@ class AuthController extends ApiController
     {
         return c(UserService::class);
     }
-    public function redirectToGoogle() : RedirectResponse
+
+    public function redirectToGoogle(): RedirectResponse
     {
         return Socialite::driver('google')->redirect();
     }
@@ -34,7 +35,13 @@ class AuthController extends ApiController
 
                 Auth::login($finduser);
 //                return redirect()->intended('home');
-                $newUser = $finduser;
+//                 return script
+                return "
+                    <script>
+                      window.opener.postMessage(" . json_encode(['user' => $finduser]) . ", '" . env('CLIENT_URL') . "');
+                      window.close();
+                    </script>
+                ";
             } else {
                 $newUser = $this->getService()->store($request, [
                     'user' => $user
@@ -45,6 +52,14 @@ class AuthController extends ApiController
                 } else {
                     return redirect()->route('error');
                 }
+
+
+                    return "
+                        <script>
+                          window.opener.postMessage(" . json_encode(['user' => $newUser['user']]) . ", '" . env('CLIENT_URL') . "');
+                          window.close();
+                        </script>
+                    ";
             }
 
 //            return [
@@ -52,12 +67,6 @@ class AuthController extends ApiController
 //                'user' => Auth::user(),
 //            ];
 //           frontend url from env('CLIENT_URL')
-            return "
-            <script>
-              window.opener.postMessage(" . json_encode(['user' => $newUser['user']]) . ", '" . env('CLIENT_URL') . "');
-              window.close();
-            </script>
-            ";
         } catch (Exception $e) {
             dd($e->getMessage());
         }
