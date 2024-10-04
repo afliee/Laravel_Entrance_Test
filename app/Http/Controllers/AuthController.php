@@ -29,6 +29,7 @@ class AuthController extends ApiController
 
             $user = Socialite::driver('google')->user();
             $finduser = User::where('google_id', $user->id)->first();
+            $newUser = null;
             if ($finduser) {
 
                 Auth::login($finduser);
@@ -53,7 +54,7 @@ class AuthController extends ApiController
 //           frontend url from env('CLIENT_URL')
             return "
             <script>
-              window.opener.postMessage(" . json_encode(['user' => $user]) . ", '" . env('CLIENT_URL') . "');
+              window.opener.postMessage(" . json_encode(['user' => $newUser['user']]) . ", '" . env('CLIENT_URL') . "');
               window.close();
             </script>
             ";
