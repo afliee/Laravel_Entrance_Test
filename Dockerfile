@@ -1,20 +1,32 @@
-FROM richarvey/nginx-php-fpm:latest
+# Use official PHP image with necessary extensions
+FROM php:8.3-fpm
 
-COPY . .
+# Set working directory
+WORKDIR /var/www
 
-# Image config
-ENV SKIP_COMPOSER 1
-ENV WEBROOT /var/www/html/public
-ENV PHP_ERRORS_STDERR 1
-ENV RUN_SCRIPTS 1
-ENV REAL_IP_HEADER 1
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpq-dev \
+    libonig-dev \
+    libzip-dev \
+    zip \
+    unzip
 
-# Laravel config
-ENV APP_ENV production
-ENV APP_DEBUG false
-ENV LOG_CHANNEL stderr
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_pgsql mbstring zip exif pcntl
 
-# Allow composer to run as root
-ENV COMPOSER_ALLOW_SUPERUSER 1
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-CMD ["/start.sh"]
+# Copy application code
+COPY . /var/www
+
+# Set ownership and permissions for Laravel
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 755 /var/www/storage
+
+# Expose port 9000 and start php-fpm server
+EXPOSE 9000
+CMD ["php-fpm"]
