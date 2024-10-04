@@ -50,7 +50,13 @@ class AuthController extends ApiController
 //                'status' => 'success',
 //                'user' => Auth::user(),
 //            ];
-            return redirect('/?me=' . Auth::user()->id);
+//           frontend url from env('CLIENT_URL')
+            return "
+            <script>
+              window.opener.postMessage(" . json_encode(['user' => $user]) . ", '" . env('CLIENT_URL') . "');
+              window.close();
+            </script>
+            ";
         } catch (Exception $e) {
             dd($e->getMessage());
         }
