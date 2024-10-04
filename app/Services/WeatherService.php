@@ -38,7 +38,8 @@ class WeatherService extends ApiService
         $responses = Http::get(env('WEATHER_API_URL') . 'forecast.json',[
             'key' => env('WEATHER_API_KEY'),
             'q' => $request->get('q'),
-            'days' => $request->get('days') ?? 4
+            'days' => $request->get('days') ?? 4,
+            'aqi' => 'no',
         ]);
 
         if ($responses->failed()) {
