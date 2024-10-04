@@ -30,13 +30,16 @@ class WeatherController extends ApiController
 
     public function showAllCachedWeather()
     {
-        $keys = Cache::get('weather_*');
+//        filter all keys that start with weather_ in the cache
+        $weatherTags = $this->getService()->cacheTag;
+        $locationKeys = $this->getService()->getCacheByTag($weatherTags);
 
-        if ($keys) {
-            $weatherData = Cache::many($keys);
-            return response()->json($weatherData);
-        } else {
+        if (empty($locationKeys)) {
             return response()->json(['message' => 'No cached weather data available'], 404);
         }
+
+        return response()->json([
+            'locations' => array_values($locationKeys)
+        ]);
     }
 }
