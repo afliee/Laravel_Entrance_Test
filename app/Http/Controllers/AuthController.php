@@ -50,7 +50,7 @@ class AuthController extends ApiController
 //                'status' => 'success',
 //                'user' => Auth::user(),
 //            ];
-            return redirect()->route('/');
+            return redirect('/?me=' . Auth::user()->id);
         } catch (Exception $e) {
             dd($e->getMessage());
         }
