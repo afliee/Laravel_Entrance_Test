@@ -22,6 +22,8 @@ php artisan schedule:run
 echo "Optimizing..."
 php artisan optimize
 
+echo "Publish cors..."
+php artisan config:publish cors
 # run queue
 echo "Running queue..."
 nohup php artisan queue:work --daemon &
