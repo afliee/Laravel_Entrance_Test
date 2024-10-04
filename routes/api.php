@@ -15,7 +15,7 @@ Route::get('/', static function () {
 });
 
 Route::group(['prefix' => 'user'], static function () {
-    Route::get('/{id}', [UserService::class, 'show']);
+    Route::get('/', [UserService::class, 'show']);
 });
 // prefix weather
 Route::group(['prefix' => 'weather'], static function () {
