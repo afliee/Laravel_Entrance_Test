@@ -34,7 +34,7 @@ class AuthController extends ApiController
 
                 Auth::login($finduser);
 //                return redirect()->intended('home');
-
+                $newUser = $finduser;
             } else {
                 $newUser = $this->getService()->store($request, [
                     'user' => $user
