@@ -12,10 +12,18 @@ class WeatherService extends ApiService
 {
     public function show(Request $request)
     {
-        $validate = $this->validate($request, [
-            'q' => 'required|string',
-            'days' => 'nullable|integer'
-        ]);
+        $data = $request->all();
+        $rules = [
+            'days' => 'nullable|integer',
+        ];
+//        check if in data consist of q then not require lat and lon and if not then require lat and lon
+        if (isset($data['q'])) {
+            $rules['q'] = 'required|string';
+        } else {
+            $rules['lat'] = 'required|numeric';
+            $rules['lon'] = 'required|numeric';
+        }
+        $validate = $this->validate($request, $rules);
 
         if (isset($validate)) {
             return $validate;
