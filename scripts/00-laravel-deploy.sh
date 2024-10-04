@@ -11,9 +11,6 @@ php artisan route:cache
 echo "Running migrations..."
 php artisan migrate --force
 
-echo "Publishing cloudinary provider..."
-php artisan vendor:publish --provider="CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider" --tag="cloudinary-laravel-config"
-
 # show schedule
 echo "Showing schedule..."
 php artisan schedule:list
@@ -22,7 +19,16 @@ php artisan schedule:list
 echo "Running schedule..."
 php artisan schedule:run
 
+echo "Optimizing..."
+php artisan optimize
+
 # run queue
 echo "Running queue..."
-php artisan queue:work --daemon
+nohup php artisan queue:work --daemon &
+echo "Queue is running..."
+
+echo "Publishing cloudinary provider..."
+php artisan vendor:publish --provider="CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider" --tag="cloudinary-laravel-config"
+
+
 
