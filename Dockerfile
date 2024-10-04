@@ -20,6 +20,21 @@ RUN docker-php-ext-install pdo pdo_pgsql mbstring zip exif pcntl
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Image config
+ENV SKIP_COMPOSER 1
+ENV WEBROOT /var/www/public
+ENV PHP_ERRORS_STDERR 1
+ENV RUN_SCRIPTS 1
+ENV REAL_IP_HEADER 1
+
+# Laravel config
+ENV APP_ENV production
+ENV APP_DEBUG false
+ENV LOG_CHANNEL stderr
+
+# Allow composer to run as root
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
 # Copy application code
 COPY . /var/www
 
