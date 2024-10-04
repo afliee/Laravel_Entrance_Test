@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\WeatherController;
+use App\Services\UserService;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 Route::get('/', static function () {
@@ -14,7 +15,7 @@ Route::get('/', static function () {
 });
 
 Route::group(['prefix' => 'user'], static function () {
-    Route::get('/{id}', [WeatherController::class, 'show']);
+    Route::get('/{id}', [UserService::class, 'show']);
 });
 // prefix weather
 Route::group(['prefix' => 'weather'], static function () {
