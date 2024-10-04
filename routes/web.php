@@ -24,3 +24,9 @@ Route::controller(AuthController::class)->group(function () {
 Route::post('/subscribe', [UserController::class, 'subscribe']);
 Route::post('/unsubscribe', [UserController::class, 'unsubscribe']);
 Route::get('/confirm-subscription/{token}', [UserController::class, 'confirmSubscription']);
+Route::get('/error', function () {
+    return [
+        'status' => false,
+        'message' => 'An error occurred...',
+    ];
+});

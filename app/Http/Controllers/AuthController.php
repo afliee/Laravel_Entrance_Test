@@ -42,14 +42,15 @@ class AuthController extends ApiController
                 if ($newUser['status']) {
                     Auth::login($newUser['user']);
                 } else {
-                    dd($newUser);
+                    return redirect()->route('error');
                 }
             }
 
-            return [
-                'status' => 'success',
-                'user' => Auth::user(),
-            ];
+//            return [
+//                'status' => 'success',
+//                'user' => Auth::user(),
+//            ];
+            return redirect()->route('/');
         } catch (Exception $e) {
             dd($e->getMessage());
         }
